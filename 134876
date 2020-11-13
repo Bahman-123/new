@@ -1,0 +1,117 @@
+######## imports ########
+from googletrans import Translator
+from hashlib import sha256
+from re import findall
+
+#********Languages Alphabet**********
+
+
+PersianLetters = ["آ","ا","ب","پ","ت","ث","ج","چ","ح","خ","د","ذ","ر","ز","ژ","س","ش","ص","ض","ط","ظ","ع","غ","ف","ق","ک","گ","ل","م","ن","و","ه","ی","۱","۲","۳","۴","۵","۶","۷","۸","۹","۰","،","؟","«","»","؛","\u200c"]
+
+
+EnglishLetters = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","1","2","3","4","5","6","7","8","9","0",",","",";",'"',]
+
+
+ArabicLetters = ["آ","ا","ء","ب","ت","ث","ج","ح","خ","د","ذ","ر","ز","س","ش","ص","ض","ط","ظ","ع","غ","ف","ق","ک","ل","م","ن","و","ه","ة","ی","ي","۱","۲","۳","۴","۵","۶","۷","۸","۹","۰","،","؟","«","»","؛","\u200c"]
+
+
+RussianLetters = ["а","б","в","г","д","е","ж","з","и","й","к","л","м","н","о","п","р","с","т","у","ф","х","ц","ч","ш","щ","ъ","ы","ь","э","ю","я","1","2","3","4","5","6","7","8","9","0",".",",",'"']
+
+
+#****************Tools****************
+def loop(letter,alphabet):
+	result = []
+	for i in alphabet:
+		result.append(letter+i) 
+	return result
+
+
+def abbreviation(sentence):
+	speld = [] ; result=""
+	for word in sentence.split(" "):
+		speld.append(word[0])
+	for item in speld:
+		result += item
+	return result.upper()
+
+
+def translate(path,lang) -> str:
+	file = open(path,'r')
+	GT = Translator()
+	return GT.translate(file.read(),lang).text
+
+
+def crack(hashword,alphabet):
+	#-------this method is not available
+	#this method is for crack sha256
+	result = ""
+	for a in findall(".{64}",hashword):
+		for b in alphabet:
+			if sha256(b.encode()).hexdigest() == a:
+				result += b
+	return result
+
+def hasher(word):
+	return sha256(word.encode()).hexdigest()
+
+
+def checkFile(listName,filePath):
+	return create(listName,open(str(filePath)))
+
+
+def XisY(listName,itemPos,Value):
+	return listName[itemPos] == Value
+
+
+def change(listName,itemPos,Value):
+	c = listName[int(itemPos)]=Value
+	return "changed"
+
+
+def removeX(listName,X):
+	r = listName.remove(str(X))
+	return "The %s removed"%(X)
+
+
+def appendX(listName,X):
+	listName.append(X)
+	return "append"
+
+
+def get(listName,position):
+	return listName[int(position)-1]
+
+
+def find(Name1,Name2,Value):
+	chars =""
+	#return Name1, item Value from Name2
+	for i in list(Value):
+		chars += Name1[Name2.index(i)]
+	return chars
+
+
+#***********Orginal Functions**********
+
+#@@@ Creator Function @@@#
+def create(alphabet,getText):
+	if any(i in alphabet for i in str(getText)):
+		isOkay = True
+	else:
+		isOkay = False
+	return isOkay
+
+#$$$ Language Functions $$$#
+def Persian(fa):	
+	return create(PersianLetters,fa)
+
+
+def English(en):
+	return create(EnglishLetters,en)
+
+
+def Arabic(ar):
+	return create(ArabicLetters,ar)
+
+
+def Russian(ru):
+	return create(RussianLetters,ru)
